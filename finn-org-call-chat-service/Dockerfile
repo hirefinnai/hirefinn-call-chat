@@ -1,0 +1,35 @@
+FROM python:3.12-slim
+
+ARG CALL_CHAT_SERVICE_SERVER_HOST="0.0.0.0"
+ARG CALL_CHAT_SERVICE_SERVER_PORT=8555
+
+ARG WORKERS=1
+
+ENV CALL_CHAT_SERVICE_SERVER_HOST=$CALL_CHAT_SERVICE_SERVER_HOST
+ENV CALL_CHAT_SERVICE_SERVER_PORT=$CALL_CHAT_SERVICE_SERVER_PORT
+
+ENV OPENAI_API_KEY="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"
+ENV WORKERS=$WORKERS
+
+
+ENV TWILIO_ACCOUNT_SID="ACa5ffdb07e153c5e7d29b7c3cdd46e0bd"
+ENV TWILIO_AUTH_TOKEN="d8690e5922ac72d972dc2479ad18fa71"
+ENV NGROK_URL="https://call-chat-api.hirefinn.ai"
+
+ENV SUPABASE_URL="https://ifgbblwhmhldhvghgooi.supabase.co"
+ENV SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmZ2JibHdobWhsZGh2Z2hnb29pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2NTg1OTAsImV4cCI6MjA1MjIzNDU5MH0.yXXq4-iUk4odlD9-5tv6iQsnzPsgKYkTTfaowzf-OPk"
+
+
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip3 install --no-cache-dir -r /code/requirements.txt
+
+COPY ./app /code/app
+
+RUN apt-get update && apt-get install -y curl
+
+EXPOSE $CALL_CHAT_SERVICE_SERVER_PORT
+
+CMD ["python", "app/main.py"]

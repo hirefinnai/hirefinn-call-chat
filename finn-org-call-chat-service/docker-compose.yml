@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  application:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: finn-call-chat-service
+    ports:
+      - 8555:8555
+    environment:
+      - CALL_CHAT_SERVICE_SERVER_HOST=0.0.0.0
+      - CALL_CHAT_SERVICE_SERVER_PORT=8555
