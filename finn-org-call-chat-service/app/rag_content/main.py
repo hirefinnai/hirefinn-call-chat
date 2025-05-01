@@ -21,7 +21,7 @@ class RagContent:
         Returns:
             dict: The JSON response from the server
         """
-
+ 
         url = "https://rag-api.hirefinn.ai/v1/query"
 
         data= aiohttp.FormData()
@@ -43,7 +43,8 @@ if __name__ == "__main__":
     print("rag_content")
     async def main():
         rag_content= RagContent()
-        data= await rag_content.get_rag_content("What is game mchanics?", "e318c8f0-7e4b-4b25-ad29-2babf0efefa7", "7f15dc26-851a-4653-a779-7b9d720543ec")
+        # data= await rag_content.get_rag_content("What is game mchanics?", "e318c8f0-7e4b-4b25-ad29-2babf0efefa7", "7f15dc26-851a-4653-a779-7b9d720543ec")
+        data="Hello"
         print(data)
         return data
 

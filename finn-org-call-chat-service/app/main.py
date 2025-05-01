@@ -1,38 +1,41 @@
+from agents_worker.main import HireFinnAgent
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional
-from agents import Runner
-from swarm.main import HireFinnAgent
-from dotenv import load_dotenv
-load_dotenv()
+import uvicorn
+import os
 
 app = FastAPI()
 
-# Create a single instance of HireFinnAgent to be used across requests
-hire_finn_agent = HireFinnAgent()
+# Model for chat messages
+class ChatMessage(BaseModel):
+    role: str
+    content: str
 
-# Define the request model
+# Model for chat request
 class ChatRequest(BaseModel):
-    query: str
-    messages: List[dict]
-    agent_id: str
-    org_id: str
+    messages: list[ChatMessage]
+    org_id: str = "123"
+    agent_id: str = "123"
 
-@app.post("/v1/call/query")
-async def call_query(request: ChatRequest):
+# Model for chat response  
+class ChatResponse(BaseModel):
+    response: str
+    
+@app.post("/v1/call_chat/query", response_model=ChatResponse)
+async def chat(request: ChatRequest):
     try:
-        result = await hire_finn_agent.call_chat_completion(
-            query=request.query,
-            messages=request.messages,
-            agent_id=request.agent_id,
-            org_id=request.org_id
+        worker = HireFinnAgent()
+        assistant_response = await worker.get_assistant_response(
+            request.messages,
+            request.org_id,
+            request.agent_id,
+            request.messages[-1].content if request.messages else ""
         )
-
-        return {"response": result.final_output}
-
+        return ChatResponse(response=assistant_response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8555)
+    host = os.getenv("CALL_CHAT_SERVICE_SERVER_HOST", "0.0.0.0")
+    port = int(os.getenv("CALL_CHAT_SERVICE_SERVER_PORT", 7501))
+    uvicorn.run(app, host=host, port=port)
