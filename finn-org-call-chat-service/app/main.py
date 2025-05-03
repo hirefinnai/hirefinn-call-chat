@@ -23,6 +23,7 @@ class ChatRequest(BaseModel):
     response_guidelines: str = ""
     welcome_message: str = ""
     call_workflow: dict = {}
+    finn_name: str = "Voice Agent"
 
 # Model for chat response  
 class ChatResponse(BaseModel):
@@ -43,7 +44,8 @@ async def chat(request: ChatRequest):
             request.guardrails,
             request.response_guidelines,
             request.welcome_message,
-            request.call_workflow
+            request.call_workflow,
+            request.finn_name
         )
         return ChatResponse(response=assistant_response)
     except Exception as e:

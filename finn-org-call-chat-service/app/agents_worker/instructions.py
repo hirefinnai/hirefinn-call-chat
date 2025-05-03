@@ -1,7 +1,6 @@
 def generate_call_agent_prompt(
     messages,
     org_id,
-    agent_name,
     latest_user_input,
     use_case,
     language,
@@ -10,7 +9,8 @@ def generate_call_agent_prompt(
     response_guidelines,
     welcome_message,
     call_workflow,
-    rag_content=None  # Optional: context-specific RAG chunks
+    rag_content=None,  # Optional: context-specific RAG chunks
+    finn_name="Voice Agent"
 ):
     workflow_steps = call_workflow.get("nodes", [])
     workflow_edges = call_workflow.get("edges", [])
@@ -28,7 +28,7 @@ def generate_call_agent_prompt(
     rag_context = f"\n### 📚 Contextual Knowledge for your reference (RAG Content):\n{rag_content}\n" if rag_content else ""
 
     prompt = f"""
-You are {agent_name}, an AI voice agent representing **{org_id}**.
+You are {finn_name}, an AI voice agent representing **{org_id}**.
 Initially greet the user with the following message:
 Just say the following message to the user for greeting :
 {welcome_message}

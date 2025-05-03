@@ -35,7 +35,7 @@ class HireFinnAgent:
         return self.rag_content
 
 
-    async def get_assistant_response(self, messages, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow):
+    async def get_assistant_response(self, messages, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow, finn_name):
         assistant_response = "Response from assistant"
 
         rag_content = await self.extract_rag_content(org_id=org_id, agent_id=agent_id, user_input=user_input)
@@ -53,7 +53,8 @@ class HireFinnAgent:
             response_guidelines=response_guidelines,
             welcome_message=welcome_message,
             call_workflow=call_workflow,
-            rag_content=rag_content
+            rag_content=rag_content,
+            finn_name=finn_name
         )
         
         # Update agent instructions
