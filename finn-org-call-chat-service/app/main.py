@@ -14,8 +14,15 @@ class ChatMessage(BaseModel):
 # Model for chat request
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
-    org_id: str = "123"
-    agent_id: str = "123"
+    org_id: str = ""
+    agent_id: str = ""
+    use_case: str = ""
+    language: str = ""
+    indentity_text: str = ""
+    guardrails: str = ""
+    response_guidelines: str = ""
+    welcome_message: str = ""
+    call_workflow: dict = {}
 
 # Model for chat response  
 class ChatResponse(BaseModel):
@@ -29,7 +36,14 @@ async def chat(request: ChatRequest):
             request.messages,
             request.org_id,
             request.agent_id,
-            request.messages[-1].content if request.messages else ""
+            request.messages[-1].content if request.messages else "",
+            request.use_case,
+            request.language,
+            request.indentity_text,
+            request.guardrails,
+            request.response_guidelines,
+            request.welcome_message,
+            request.call_workflow
         )
         return ChatResponse(response=assistant_response)
     except Exception as e:
