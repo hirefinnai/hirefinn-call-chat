@@ -56,7 +56,7 @@ class HireFinnAgent:
             rag_content=rag_content,
             finn_name=finn_name
         )
-        
+    
         # Update agent instructions
         self.instructions = instructions
         print("Instructions: ", self.instructions)
