@@ -46,8 +46,8 @@ def slots_from_calendar(context_variables):
         
         # Set up API request parameters
         start_time = time.time()
+        start_time = start_time + (2 * 24 * 60 * 60)  # Get slots for next 7 days in seconds
         end_time = start_time + (2 * 24 * 60 * 60)  # Get slots for next 7 days in seconds
-        
         url = f"https://api.cal.com/v2/slots"
         headers = {
             "Authorization": f"Bearer {context_variables['calendar_api_key']}", 

@@ -17,7 +17,7 @@ def to_check_availability_agent(context_variables, check_all_availabile_slots):
     Args:
         context_variables (dict): A dictionary containing necessary context information including:
             - event_id (str): Identifier for the event type to check availability for
-            - Additional parameters may be included for filtering available slots
+            - calendar_api_key (str): API key for Cal.com authentication
         check_all_availabile_slots (function): A function that checks all available slots for a given event type. You must call this function.
     Returns:
         Agent: Returns the check_availability_agent instance that handles slot availability checking

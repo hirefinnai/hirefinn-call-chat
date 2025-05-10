@@ -22,7 +22,6 @@ def to_reserve_slot_agent(context_variables, reserve_slot_for_startTime):
             - slotStart (str): The start time of the slot to be reserved
             - event_id (str): The identifier of the event type being reserved
             - attendee_details (dict): Information about the person booking the appointment
-            - Other relevant booking details passed from previous agents    
         reserve_slot_for_startTime (function): A function that reserves a slot for a given start time. You must call this function.
     Returns:
         Agent: Returns the reserve_slot_agent instance that handles the slot reservation process

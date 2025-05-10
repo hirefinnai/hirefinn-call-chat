@@ -64,7 +64,7 @@ class HireFinnAgent:
             agent = self.agent,
             messages = messages,
             debug = True,
-            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": "2444587", "slotStart": "2025-05-13T10:30:00.000Z"}
+            context_variables={"calendar_api_key": self.calendar_api_key}
         )
 
         # print("\n\n Assistant response: ", assistant_response)

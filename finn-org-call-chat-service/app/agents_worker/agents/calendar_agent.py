@@ -5,7 +5,7 @@ from agents_worker.agents.book_appointment_agent import to_book_appointment_agen
 from swarm import Agent
 from agents_worker.instructions import CALENDAR_AGENT_INSTRUCTIONS
 
-def to_calendar_agent(context_variables, to_event_details_agent, to_check_availability_agent, to_reserve_slot_agent, to_book_appointment_agent):
+def to_calendar_agent(context_variables):
     """
     Main entry point for calendar-related operations. This function transfers control to the Calendar Agent
     which orchestrates the entire appointment booking flow.
@@ -36,10 +36,10 @@ def to_calendar_agent(context_variables, to_event_details_agent, to_check_availa
         context_variables (dict): A dictionary containing necessary context information including:
             - calendar_api_key (str): API key for calendar access
             - Additional context variables may be required for specific sub-agents
-        to_event_details_agent (function): A function that transfers control to the Event Details Agent. You must call this function.
-        to_check_availability_agent (function): A function that transfers control to the Check Availability Agent. You must call this function.
-        to_reserve_slot_agent (function): A function that transfers control to the Reserve Slot Agent. You must call this function.
-        to_book_appointment_agent (function): A function that transfers control to the Book Appointment Agent. You must call this function.
+        to_event_details_agent (function): A function that transfers control to the Event Details Agent.
+        to_check_availability_agent (function): A function that transfers control to the Check Availability Agent.
+        to_reserve_slot_agent (function): A function that transfers control to the Reserve Slot Agent.
+        to_book_appointment_agent (function): A function that transfers control to the Book Appointment Agent.
     Returns:
         Agent: Returns the calendar_agent instance that orchestrates the entire booking workflow
 

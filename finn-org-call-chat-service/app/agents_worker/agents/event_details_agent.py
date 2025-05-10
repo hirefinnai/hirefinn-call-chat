@@ -18,11 +18,11 @@ def to_event_details_agent(context_variables, get_events_from_calendar):
     Args:
         context_variables (dict): A dictionary containing necessary context information including:
             - calendar_api_key (str): API key required for accessing calendar events
-            - Additional parameters may be included for filtering or customizing event retrieval
         get_events_from_calendar (function): A function that retrieves all available calendar events using the provided API key. You must call this function.
     Returns:
         Agent: Returns the event_details_agent instance that handles calendar event retrieval
               using the get_events_from_calendar function
+              context_variables["event_id"] is set to the first event id in the list of events
 
     Note:
         - This agent must be called before checking availability or making bookings

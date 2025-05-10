@@ -14,7 +14,7 @@ if 'messages' not in st.session_state:
 # Sidebar inputs
 with st.sidebar:
     st.header("Configuration")
-    CALENDAR_API_KEY = st.text_input("Calendar API Key", "cal_live_d6663bd0bc8047c4d83501365dbcc266")
+    CALENDAR_API_KEY = st.text_input("Calendar API Key", "cal_live_3a6e17cda0b97d95532245db738975dc")
     org_id = st.text_input("Organization ID", "org_123")
     agent_id = st.text_input("Agent ID", "agent_456") 
     use_case = st.text_input("Use Case", "Lead Generation")
