@@ -3,11 +3,9 @@ from openai import OpenAI
 from rag_content.main import RagContent
 import json
 from swarm import Agent
-from tools.check_availability.main import transfer_to_check_availability
-from tools.calendar_details.main import transfer_to_calendar_details
-from tools.book_appointment.main import transfer_to_book_appointment
-from tools.get_workflow.main import transfer_to_get_workflow
+from agents_worker.agents.workflow_agent import to_get_workflow_agent
 from agents_worker.instructions import generate_call_agent_prompt
+from agents_worker.agents.calendar_agent import to_calendar_agent
 
 # Initialize OpenAI client
 openai_client = OpenAI(api_key="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")
@@ -21,10 +19,12 @@ class HireFinnAgent:
     def __init__(self):
         self.rag_content=""
         self.instructions=""
+        self.calendar_api_key=""
         self.agent = Agent(
             name="Hire Finn Interface Agent",
             instructions=self.instructions,
-            functions=[transfer_to_check_availability, transfer_to_calendar_details, transfer_to_book_appointment, transfer_to_get_workflow]
+            functions=[to_get_workflow_agent,to_calendar_agent],         ## Remember to add Transfer to Human Agent
+            parallel_tool_calls=True,
             )
 
     async def extract_rag_content(self, org_id, agent_id, user_input):
@@ -35,16 +35,16 @@ class HireFinnAgent:
         return self.rag_content
 
 
-    async def get_assistant_response(self, messages, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow, finn_name):
+    async def get_assistant_response(self, messages,  calendar_api_key, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow, finn_name):
         assistant_response = "Response from assistant"
 
         rag_content = await self.extract_rag_content(org_id=org_id, agent_id=agent_id, user_input=user_input)
         
+        self.calendar_api_key = calendar_api_key    
         # Generate dynamic instructions using the prompt function
         instructions = generate_call_agent_prompt(
             messages=messages,
             org_id=org_id,
-            agent_name=agent_id,
             latest_user_input=user_input,
             use_case=use_case,
             language=language,
@@ -59,17 +59,16 @@ class HireFinnAgent:
     
         # Update agent instructions
         self.instructions = instructions
-        print("Instructions: ", self.instructions)
-
         # Get response from agent
         assistant_response = client.run(
             agent = self.agent,
             messages = messages,
-            debug = True
+            debug = True,
+            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": "2367134", "slotStart": "2025-05-13T03:30:00.000Z"}
         )
 
-        print("Assistant response: ", assistant_response)
-        print("Name of the agent: ", self.agent.name)
+        # print("\n\n Assistant response: ", assistant_response)
+        print("\n\n Name of the agent: ", self.agent.name)
         return assistant_response.messages[-1]["content"]
 
 
