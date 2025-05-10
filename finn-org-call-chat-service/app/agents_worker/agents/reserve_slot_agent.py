@@ -1,4 +1,5 @@
 from tools.reserve_slot.main import reserve_slot_for_startTime
+from agents_worker.agents.book_appointment_agent import to_book_appointment_agent
 from swarm import Agent
 from agents_worker.instructions import RESERVE_SLOT_AGENT_INSTRUCTIONS
 
@@ -34,7 +35,8 @@ def to_reserve_slot_agent(context_variables, reserve_slot_for_startTime):
         - Reservations typically have a short time-to-live to prevent indefinite holds
         - This is a critical step in preventing double-bookings in high-concurrency scenarios
     """
-    print("Transferring to reserve slot")
+    print("Transferring to reserve slot: ", context_variables["slotStart"])
+    print("Transferring to check availability: ", context_variables["event_id"])
     return reserve_slot_agent
 
 
@@ -44,7 +46,7 @@ reserve_slot_agent = Agent(
     instructions = RESERVE_SLOT_AGENT_INSTRUCTIONS,
     parallel_tool_calls=True,
 )
-reserve_slot_agent.functions = [reserve_slot_for_startTime]
+reserve_slot_agent.functions = [reserve_slot_for_startTime, to_book_appointment_agent]
 
 
 print("\n\nReserve slot agent: ", reserve_slot_agent.name)

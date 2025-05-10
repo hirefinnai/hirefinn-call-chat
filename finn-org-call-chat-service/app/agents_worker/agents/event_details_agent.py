@@ -1,4 +1,7 @@
 from tools.event_details.main import get_events_from_calendar
+from agents_worker.agents.check_availability_agent import to_check_availability_agent
+from agents_worker.agents.reserve_slot_agent import to_reserve_slot_agent
+from agents_worker.agents.book_appointment_agent import to_book_appointment_agent
 from swarm import Agent
 from agents_worker.instructions import EVENT_DETAILS_AGENT_INSTRUCTIONS
 
@@ -37,6 +40,6 @@ event_details_agent = Agent(
     parallel_tool_calls=True,
 )
 
-event_details_agent.functions = [get_events_from_calendar]
+event_details_agent.functions = [get_events_from_calendar, to_check_availability_agent, to_reserve_slot_agent, to_book_appointment_agent]
 
 print("\n\n Event details agent: ", event_details_agent.name)

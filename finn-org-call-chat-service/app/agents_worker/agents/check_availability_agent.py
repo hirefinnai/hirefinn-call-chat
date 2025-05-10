@@ -1,4 +1,6 @@
 from tools.check_availability.main import check_all_availabile_slots
+from agents_worker.agents.reserve_slot_agent import to_reserve_slot_agent
+from agents_worker.agents.book_appointment_agent import to_book_appointment_agent
 from swarm import Agent
 from agents_worker.instructions import CHECK_AVAILABILITY_AGENT_INSTRUCTIONS
 
@@ -37,6 +39,6 @@ check_availability_agent  =  Agent(
     instructions = CHECK_AVAILABILITY_AGENT_INSTRUCTIONS,
     parallel_tool_calls=True,
 )
-check_availability_agent.functions = [check_all_availabile_slots]
+check_availability_agent.functions = [check_all_availabile_slots, to_reserve_slot_agent, to_book_appointment_agent]
 
 print("\n\n Check availability agent: ", check_availability_agent.name)
