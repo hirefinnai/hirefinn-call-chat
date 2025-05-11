@@ -24,8 +24,8 @@ def book_appointment_for_startTime(context_variables, name:str, email:str):
         "eventTypeId": context_variables["event_id"],
         "start": context_variables["slotStart"],
         "responses": {
-            "name": context_variables.get("name", "Default Name2"),
-            "email": context_variables.get("email", "default@email.com"),
+            "name": context_variables.get("name", "Akarsh"),
+            "email": context_variables.get("email", "akarsh@finn.ai"),
             "location": {
                 "value": "",
                 "optionValue": ""

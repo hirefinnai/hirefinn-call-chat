@@ -8,7 +8,7 @@ from agents_worker.instructions import generate_call_agent_prompt
 from agents_worker.agents.calendar_agent import to_calendar_agent
 import os
 # Initialize OpenAI client
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_client = OpenAI(api_key="")
 
 
 # Initialize Swarm client with OpenAI client
@@ -36,11 +36,11 @@ class HireFinnAgent:
         return self.rag_content
 
 
-    async def get_assistant_response(self, messages,  calendar_api_key, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow, finn_name):
+    async def get_assistant_response(self,  messages, calendar_api_key, org_id, agent_id, user_input, use_case, language, indentity_text, guardrails, response_guidelines, welcome_message, call_workflow, finn_name):
         assistant_response = "Response from assistant"
 
-        rag_content = await self.extract_rag_content(org_id=org_id, agent_id=agent_id, user_input=user_input)
-        
+        # rag_content = await self.extract_rag_content(org_id=org_id, agent_id=agent_id, user_input=user_input)
+        print("Calendar API key: ", calendar_api_key)
         self.calendar_api_key = calendar_api_key    
         # Generate dynamic instructions using the prompt function
         instructions = generate_call_agent_prompt(
@@ -54,10 +54,10 @@ class HireFinnAgent:
             response_guidelines=response_guidelines,
             welcome_message=welcome_message,
             call_workflow=call_workflow,
-            rag_content=rag_content,
+            rag_content="",
             finn_name=finn_name
         )
-    
+        print("Instructions: ", instructions)
         # Update agent instructions
         self.instructions = instructions
         # Get response from agent
@@ -66,7 +66,7 @@ class HireFinnAgent:
             agent = self.agent,
             messages = messages,
             debug = True,
-            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": 2444587, "slotStart": "2025-05-14T16:00:00.000Z"}
+            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": 2444587, "slotStart": "2025-06-15T15:15:00.000Z"}
         )
 
         # print("\n\n Assistant response: ", assistant_response)

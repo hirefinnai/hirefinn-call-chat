@@ -34,20 +34,21 @@ class ChatResponse(BaseModel):
 async def chat(request: ChatRequest):
     try:
         worker = HireFinnAgent()
+        print("Request: ", request)
         assistant_response = await worker.get_assistant_response(
-            request.messages,
-            request.org_id,
-            request.agent_id,
-            request.messages[-1].content if request.messages else "",
-            request.use_case,
-            request.language,
-            request.indentity_text,
-            request.guardrails,
-            request.response_guidelines,
-            request.welcome_message,
-            request.call_workflow,
-            request.finn_name,
-            request.calendar_api_key
+            messages=request.messages,
+            calendar_api_key=request.calendar_api_key,
+            org_id=request.org_id,
+            agent_id=request.agent_id,
+            user_input=request.messages[-1].content if request.messages else "",
+            use_case=request.use_case,
+            language=request.language,
+            indentity_text=request.indentity_text,
+            guardrails= request.guardrails,
+            response_guidelines=request.response_guidelines,
+            welcome_message=request.welcome_message,
+            call_workflow=request.call_workflow,
+            finn_name=request.finn_name
         )
         return ChatResponse(response=assistant_response)
     except Exception as e:
