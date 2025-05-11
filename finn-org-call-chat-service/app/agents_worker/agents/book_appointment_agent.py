@@ -20,7 +20,7 @@ def to_book_appointment_agent(context_variables: dict, book_appointment_for_star
 
 book_appointment_agent = Agent(
     name = "Book Appointment Agent",
-    instructions = "Use the book_appointment_for_startTime function to book the appointment.",
+    instructions = BOOK_APPOINTMENT_AGENT_INSTRUCTIONS,
     parallel_tool_calls=True,
 )
 
