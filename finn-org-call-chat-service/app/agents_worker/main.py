@@ -8,7 +8,7 @@ from agents_worker.instructions import generate_call_agent_prompt
 from agents_worker.agents.calendar_agent import to_calendar_agent
 import os
 # Initialize OpenAI client
-openai_client = OpenAI(api_key="")
+openai_client = OpenAI(api_key="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")
 
 
 # Initialize Swarm client with OpenAI client
