@@ -21,7 +21,7 @@ class HireFinnAgent:
         self.instructions=""
         self.calendar_api_key=""
         self.agent = Agent(
-            name="Hire Finn Interface Agent",
+            name="Finn Interface Agent",
             instructions=self.instructions,
             functions=[to_calendar_agent],         ## Remember to add Transfer to Human Agent
             parallel_tool_calls=True,
