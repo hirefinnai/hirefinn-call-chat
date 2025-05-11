@@ -1,29 +1,17 @@
 # All the reserve slot related tools will be implemented here
 import requests
 
-def book_appointment_for_startTime(context_variables):
+def book_appointment_for_startTime(context_variables, name:str, email:str):
     '''
-    Books an appointment in Cal.com using the provided context variables.
-    
-    This function should be called after a slot has been reserved and the user has confirmed
-    they want to book the appointment. It makes a POST request to Cal.com's booking API
-    to create a new appointment.
+    Use this function to book an appointment in Cal.com using the provided context variables.
 
     Args:
-        context_variables (dict): A dictionary containing:
-            - event_id (str): The Cal.com event type ID
-            - slotStart (str): ISO formatted start time for the appointment
+        context_variables (dict): A dictionary containing booking context information.
             - calendar_api_key (str): API key for Cal.com
-            - name (str, optional): Name of the person booking. Defaults to "Default Name"
+            - event_id (int, optional): The Cal.com event type ID
+            - slotStart (str, optional): ISO formatted start time for the appointment
+            - name (str, optional): Name of the person booking. Defaults to "Default Name2"
             - email (str, optional): Email of the person booking. Defaults to "default@email.com"
-
-    Returns:
-        str: A success or failure message indicating the booking status
-            - "Appointment booked successfully" if booking succeeds
-            - Error message with details if booking fails
-
-    Raises:
-        No explicit raises, but handles all exceptions and returns error messages as strings
     '''
     print("\n\n Booking appointment with event id:", context_variables["event_id"])
     print("Booking appointment with slot start:", context_variables["slotStart"])

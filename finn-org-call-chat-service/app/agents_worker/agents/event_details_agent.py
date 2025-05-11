@@ -5,29 +5,18 @@ from agents_worker.agents.book_appointment_agent import to_book_appointment_agen
 from swarm import Agent
 from agents_worker.instructions import EVENT_DETAILS_AGENT_INSTRUCTIONS
 
-def to_event_details_agent(context_variables, get_events_from_calendar):
+def to_event_details_agent(context_variables, get_events_from_calendar=None, to_check_availability_agent=None, to_reserve_slot_agent=None, to_book_appointment_agent=None):
     """
-    Transfers control to the Event Details Agent which handles retrieving and processing calendar event information.
-    This is typically the first agent called in the booking flow to gather available event types and durations.
-
-    The Event Details Agent is responsible for:
-    - Retrieving all available calendar events using the provided API key
-    - Determining available appointment types (e.g., 15-min, 30-min consultations)
-    - Providing event metadata needed for subsequent booking steps
-
+    Transfer control to the Event Details Agent to get the event details.
     Args:
-        context_variables (dict): A dictionary containing necessary context information including:
-            - calendar_api_key (str): API key required for accessing calendar events
-        get_events_from_calendar (function): A function that retrieves all available calendar events using the provided API key. You must call this function.
-    Returns:
-        Agent: Returns the event_details_agent instance that handles calendar event retrieval
-              using the get_events_from_calendar function
-              context_variables["event_id"] is set to the first event id in the list of events
-
-    Note:
-        - This agent must be called before checking availability or making bookings
-        - The retrieved event details are essential for the entire booking workflow
-        - Successful execution is required to proceed with availability checking
+        context_variables (dict): A dictionary containing booking context information including:
+            - calendar_api_key (str): API key for Cal.com authentication
+            - event_id (int, optional): The identifier of the event type being booked
+            - slotStart (str, optional): The start time of the slot to be booked
+        get_events_from_calendar (callable, optional): Function to get events from calendar. Defaults to None.
+        to_check_availability_agent (callable, optional): Function to check availability. Defaults to None.
+        to_reserve_slot_agent (callable, optional): Function to reserve slot. Defaults to None.
+        to_book_appointment_agent (callable, optional): Function to book appointment. Defaults to None.
     """
     print("Transferring to event details with api key: ", context_variables["calendar_api_key"])
     return event_details_agent

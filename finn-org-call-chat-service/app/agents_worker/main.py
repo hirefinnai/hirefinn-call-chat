@@ -23,7 +23,7 @@ class HireFinnAgent:
         self.agent = Agent(
             name="Hire Finn Interface Agent",
             instructions=self.instructions,
-            functions=[to_get_workflow_agent,to_calendar_agent],         ## Remember to add Transfer to Human Agent
+            functions=[to_calendar_agent],         ## Remember to add Transfer to Human Agent
             parallel_tool_calls=True,
             )
 
@@ -60,14 +60,16 @@ class HireFinnAgent:
         # Update agent instructions
         self.instructions = instructions
         # Get response from agent
+
         assistant_response = client.run(
             agent = self.agent,
             messages = messages,
             debug = True,
-            context_variables={"calendar_api_key": self.calendar_api_key}
+            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": 2444587, "slotStart": "2025-05-12T15:15:00.000Z"}
         )
 
         # print("\n\n Assistant response: ", assistant_response)
+        # print("\n\n Context variables: ", )
         print("\n\n Name of the agent: ", self.agent.name)
         return assistant_response.messages[-1]["content"]
 

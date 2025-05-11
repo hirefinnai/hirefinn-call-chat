@@ -5,51 +5,21 @@ from agents_worker.agents.book_appointment_agent import to_book_appointment_agen
 from swarm import Agent
 from agents_worker.instructions import CALENDAR_AGENT_INSTRUCTIONS
 
-def to_calendar_agent(context_variables):
+def to_calendar_agent(context_variables, to_event_details_agent=None, to_check_availability_agent=None, to_reserve_slot_agent=None, to_book_appointment_agent=None):
     """
-    Main entry point for calendar-related operations. This function transfers control to the Calendar Agent
-    which orchestrates the entire appointment booking flow.
-
-    The Calendar Agent serves as the primary coordinator for the following sequence of operations:
-    1. Retrieving event details and available slot types (via Event Details Agent)
-    2. Checking slot availability (via Check Availability Agent)
-    3. Reserving slots to prevent double bookings (via Reserve Slot Agent)
-    4. Finalizing appointment bookings (via Book Appointment Agent)
-    Always call the reserve_slot_agent first and then call the book_appointment_agent.
-    When user asks to book an appointment, immediately execute the following sequence:
-    1. to_event_details_agent()
-    2. to_check_availability_agent()
-    3. to_reserve_slot_agent()
-    4. to_book_appointment_agent()
-    Always execute the above sequence in the exact order.
-    When user ask to book appointment always execute the above sequence.
-    Do not skip any steps.
-    Do not change the order of the sequence.
-    Do not add any other steps in the sequence.
-    Do not remove any steps from the sequence.
-    Do not change the sequence of the steps.
-    Do not add any other steps in the sequence.
-    Do not remove any steps from the sequence.
-    Strictly follow the sequence.
-    Do not skip any steps.
+    Transfer control to the Calendar Agent to get the event details, check availability, reserve slot and book appointment.
     Args:
-        context_variables (dict): A dictionary containing necessary context information including:
-            - calendar_api_key (str): API key for calendar access
-            - Additional context variables may be required for specific sub-agents
-        to_event_details_agent (function): A function that transfers control to the Event Details Agent.
-        to_check_availability_agent (function): A function that transfers control to the Check Availability Agent.
-        to_reserve_slot_agent (function): A function that transfers control to the Reserve Slot Agent.
-        to_book_appointment_agent (function): A function that transfers control to the Book Appointment Agent.
-    Returns:
-        Agent: Returns the calendar_agent instance that orchestrates the entire booking workflow
-
-    Note:
-        - This is the main coordinator agent that manages the entire booking flow
-        - All calendar operations are performed through this agent's sub-agents
-        - The agent maintains the state and context throughout the booking process
+        context_variables (dict): A dictionary containing booking context information, subagent context variables.
+            - calendar_api_key (str): API key for Cal.com authentication
+            - event_id (int, optional): The identifier of the event type being booked, it is eventtypes id
+            - slotStart (str, optional): The start time of the slot to be booked
+        to_event_details_agent (callable, optional): Function to get event details. Defaults to None.
+        to_check_availability_agent (callable, optional): Function to check availability. Defaults to None.
+        to_reserve_slot_agent (callable, optional): Function to reserve slot. Defaults to None.
+        to_book_appointment_agent (callable, optional): Function to book appointment. Defaults to None.
     """
     print("Transferring to calendar agent with api key: ", context_variables["calendar_api_key"])
-    print("\n\n Context variables: ", context_variables)
+    print("\n\n Calendar agent context variables: ", context_variables)
     return calendar_agent
 
 

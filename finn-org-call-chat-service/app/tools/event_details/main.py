@@ -5,31 +5,9 @@ import requests
 
 def get_eventId_from_calendar(calendar_api_key):
     '''
-    Retrieves all available event types from Cal.com calendar.
-    
-    This function should be called at the start of the booking flow to get a list of
-    available event types that can be booked. It filters out hidden events.
-
+    Get all the event types from the calendar.
     Args:
         calendar_api_key (str): API key for Cal.com authentication
-
-    Returns:
-        dict: A dictionary containing event type details with format:
-            {
-                "event_types": [
-                    {
-                        "id": str,
-                        "title": str,
-                        "length": int,
-                        "hidden": bool
-                    },
-                    ...
-                ]
-            }
-        None: If no event types are found or if the API call fails
-
-    Note:
-        Only returns non-hidden events to ensure only bookable events are displayed
     '''
     print("\n\n Getting eventId from calendar with api key: ", calendar_api_key)
     
@@ -59,21 +37,12 @@ def get_eventId_from_calendar(calendar_api_key):
 
 def get_events_from_calendar(context_variables):
     '''
-    Wrapper function to get all available events and store the first event ID in context.
-    
-    This function should be called when you need to both retrieve available events and
-    automatically select the first event for booking. It internally calls get_eventId_from_calendar.
-
+    Use this function to get all the events from the calendar.
     Args:
-        context_variables (dict): A dictionary containing:
+        context_variables (dict): A dictionary containing booking context information.
             - calendar_api_key (str): API key for Cal.com authentication
-
-    Returns:
-        dict: Event details in the same format as get_eventId_from_calendar
-        None: If no events are found or if there's an error
-
-    Side Effects:
-        Sets context_variables["event_id"] to the ID of the first available event
+            - event_id (int, optional): The identifier of the event type being booked, it is eventtypes id  
+            - slotStart (str, optional): The start time of the slot to be booked
     '''
     print("\n\n Getting events from calendar with api key: ", context_variables["calendar_api_key"])
 

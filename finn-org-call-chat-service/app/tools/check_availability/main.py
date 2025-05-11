@@ -6,32 +6,11 @@ from datetime import datetime
 
 def slots_from_calendar(context_variables):
     '''
-    Retrieves available time slots from Cal.com calendar for a specific event type.
-    
-    This function should be called when you need to fetch available slots for the next 2 days
-    for a specific event type. It uses Cal.com's v2 API to get slot availability.
-
+    Get all the slots from the calendar for the given event id.
     Args:
-        context_variables (dict): A dictionary containing:
-            - event_id (str): The Cal.com event type ID to check slots for
+        context_variables (dict): A dictionary containing booking context information.
+            - event_id (int): The Cal.com event type ID to check slots for
             - calendar_api_key (str): API key for Cal.com authentication
-
-    Returns:
-        dict: A dictionary containing the first available slot with format:
-            {
-                "data": {
-                    "date": [{
-                        "start": "ISO timestamp",
-                        ...other slot details
-                    }]
-                },
-                "status": "success"
-            }
-        None: If no slots are available or if the API call fails
-
-    Note:
-        Currently only returns the first available slot. May need modification to return
-        multiple slots based on requirements.
     '''
     try:
         if "event_id" not in context_variables:
@@ -101,19 +80,12 @@ def slots_from_calendar(context_variables):
     
 def check_all_availabile_slots(context_variables):
     '''
-    Wrapper function to check all available slots for a given event type.
-    
-    This function should be called when you need to present available time slots to a user
-    for booking. It internally calls slots_from_calendar to get the slot data.
-
+     Use this function to check all the available slots for the given event id.
     Args:
-        context_variables (dict): A dictionary containing:
-            - event_id (str): The Cal.com event type ID to check slots for
+        context_variables (dict): A dictionary containing booking context information.
+            - event_id (int, optional): The Cal.com event type ID to check slots for
             - calendar_api_key (str): API key for Cal.com authentication
-
-    Returns:
-        dict: Calendar details containing available slots in the same format as slots_from_calendar
-        None: If no slots are found or if there's an error
+            - slotStart (str, optional): The start time of the slot to be booked
     '''
     try:
         print("\n\n Checking all available slots with event id: ", context_variables["event_id"])

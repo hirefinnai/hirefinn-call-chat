@@ -4,20 +4,12 @@ from swarm import Agent
 
 
 
-def to_get_workflow_agent(context_variables, get_workflow):
+def to_get_workflow_agent(context_variables, get_workflow=None):
     """
     Transfers control to the Get Workflow Agent to retrieve the workflow for the user.
-    
     Args:
-        context_variables (dict): A dictionary containing necessary context information including:
-            - Additional context variables may be required for specific sub-agents
-        get_workflow (function): A function that retrieves the workflow for the user. You must call this function.
-    Returns:
-        Agent: Returns the get_workflow_agent instance that handles the workflow retrieval
-               using the get_workflow function.
-    Note:
-        - This agent must be called before any other agents in the workflow
-        - The retrieved workflow is essential for the entire booking workflow
+        context_variables (dict): A dictionary containing booking context information.
+        get_workflow (callable, optional): Function to get workflow. Defaults to None.
     """
     print("Transferring to get workflow")
     return get_workflow_agent

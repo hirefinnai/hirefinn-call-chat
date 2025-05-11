@@ -4,26 +4,12 @@ import requests
 
 def reserve_slot_for_startTime(context_variables):
     '''
-    Temporarily reserves a time slot in Cal.com to prevent double booking.
-    
-    This function should be called after a user has selected a specific time slot but before
-    finalizing the booking. It creates a temporary hold on the slot to prevent other users
-    from booking it while the current user completes their booking process.
-
+    Use this function to reserve a slot for the given event id.
     Args:
-        context_variables (dict): A dictionary containing:
-            - event_id (str): The Cal.com event type ID
-            - slotStart (str): ISO formatted start time for the slot to reserve
+        context_variables (dict): A dictionary containing booking context information.
             - calendar_api_key (str): API key for Cal.com authentication
-
-    Returns:
-        str: A success or failure message indicating the reservation status
-            - "Slot reserved successfully" if reservation succeeds
-            - Error message with details if reservation fails
-
-    Note:
-        The reservation is temporary and will expire after a short period if not confirmed
-        with a booking. This is handled by Cal.com's backend.
+            - event_id (int): The Cal.com event type ID
+            - slotStart (str): ISO formatted start time for the slot to reserve
     '''
     print("Reserving slot with event id:", context_variables["event_id"])
     
