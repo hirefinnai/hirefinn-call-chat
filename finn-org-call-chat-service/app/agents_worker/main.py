@@ -6,9 +6,9 @@ from swarm import Agent
 from agents_worker.agents.workflow_agent import to_get_workflow_agent
 from agents_worker.instructions import generate_call_agent_prompt
 from agents_worker.agents.calendar_agent import to_calendar_agent
-
+import os
 # Initialize OpenAI client
-openai_client = OpenAI(api_key="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")
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 # Initialize Swarm client with OpenAI client
@@ -66,7 +66,7 @@ class HireFinnAgent:
             agent = self.agent,
             messages = messages,
             debug = True,
-            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": 2444587, "slotStart": "2025-05-12T15:15:00.000Z"}
+            context_variables={"calendar_api_key": self.calendar_api_key, "event_id": 2444587, "slotStart": "2025-05-14T16:00:00.000Z"}
         )
 
         # print("\n\n Assistant response: ", assistant_response)

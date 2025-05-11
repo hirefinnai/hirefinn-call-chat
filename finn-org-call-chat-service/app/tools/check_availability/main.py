@@ -80,7 +80,7 @@ def slots_from_calendar(context_variables):
     
 def check_all_availabile_slots(context_variables):
     '''
-     Use this function to check all the available slots for the given event id.
+    Use this function to check all the available slots for the given event id.
     Args:
         context_variables (dict): A dictionary containing booking context information.
             - event_id (int, optional): The Cal.com event type ID to check slots for
