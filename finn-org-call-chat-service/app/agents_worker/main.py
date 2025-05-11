@@ -10,6 +10,7 @@ from agents_worker.agents.calendar_agent import to_calendar_agent
 # Initialize OpenAI client
 openai_client = OpenAI(api_key="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")
 
+
 # Initialize Swarm client with OpenAI client
 client = Swarm(openai_client)
 
