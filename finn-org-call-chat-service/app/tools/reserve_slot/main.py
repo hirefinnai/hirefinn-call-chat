@@ -2,7 +2,7 @@
 from swarm import Agent
 import requests
 
-def reserve_slot_for_startTime(context_variables):
+def reserve_slot_for_startTime(context_variables, calendar_api_key:str):
     '''
     Use this function to reserve a slot for the given event id.
     Args:
@@ -15,7 +15,7 @@ def reserve_slot_for_startTime(context_variables):
     
     url = "https://api.cal.com/v2/slots/reservations"
     headers = {
-        "Authorization": f"Bearer {context_variables['calendar_api_key']}",
+        "Authorization": f"Bearer {calendar_api_key}",
         "Content-Type": "application/json",
         "cal-api-version": "2024-09-04"
     }

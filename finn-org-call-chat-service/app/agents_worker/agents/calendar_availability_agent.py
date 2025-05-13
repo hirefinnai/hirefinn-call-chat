@@ -17,6 +17,8 @@ def to_calendar_availability_agent(context_variables, get_events_from_calendar=N
         check_all_availabile_slots (callable, optional): Function to check available slots. Defaults to None.
     """
     print("Transferring to check availability with event id: ", context_variables["event_id"])
+    
+    # Yield response before returning agent
     return calendar_availability_agent
 
 

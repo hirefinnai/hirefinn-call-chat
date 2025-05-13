@@ -20,6 +20,8 @@ def to_calendar_booking_agent(context_variables: dict, reserve_slot_for_startTim
         book_appointment_for_startTime (callable, optional): Function to book appointment. Defaults to None.
     """
     print("\n\n Calendar booking agent context variables: ", context_variables)
+    
+    # Yield response before returning agent
     return calendar_booking_agent
 
 

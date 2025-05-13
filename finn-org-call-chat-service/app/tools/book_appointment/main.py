@@ -1,7 +1,7 @@
 # All the reserve slot related tools will be implemented here
 import requests
 
-def book_appointment_for_startTime(context_variables, name:str, email:str):
+def book_appointment_for_startTime(context_variables, calendar_api_key:str, name:str, email:str):
     '''
     Use this function to book an appointment in Cal.com using the provided context variables.
 
@@ -18,7 +18,7 @@ def book_appointment_for_startTime(context_variables, name:str, email:str):
 
     url = "https://api.cal.com/v1/bookings"
     params = {
-        "apiKey": context_variables["calendar_api_key"]
+        "apiKey": calendar_api_key
     }
     payload = {
         "eventTypeId": context_variables["event_id"],

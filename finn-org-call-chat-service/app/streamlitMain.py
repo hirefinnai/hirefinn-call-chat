@@ -10,20 +10,6 @@ st.title("HireFinn Call Chat Interface")
 # Initialize session state for messages and sentiment if not exists
 if 'messages' not in st.session_state:
     st.session_state.messages = []
-if 'sentiment_history' not in st.session_state:
-    st.session_state.sentiment_history = []
-
-def get_sentiment_color(score):
-    if score >= 4:
-        return "🟢 Very Positive"
-    elif score >= 3:
-        return "🟡 Positive"
-    elif score >= 2:
-        return "⚪ Neutral"
-    elif score >= 1:
-        return "🟠 Negative"
-    else:
-        return "🔴 Very Negative"
 
 # Sidebar inputs
 with st.sidebar:
@@ -40,11 +26,10 @@ with st.sidebar:
     finn_name = st.text_input("Finn Name", "John")
     
     # Display sentiment history
-    if st.session_state.sentiment_history:
-        st.header("Sentiment History")
-        avg_sentiment = sum(st.session_state.sentiment_history) / len(st.session_state.sentiment_history)
-        st.write(f"Average Sentiment: {get_sentiment_color(avg_sentiment)}")
-        st.line_chart(st.session_state.sentiment_history)
+    # if st.session_state.sentiment_history:
+    #     st.header("Sentiment History")
+    #     avg_sentiment = sum(st.session_state.sentiment_history) / len(st.session_state.sentiment_history)
+    #     st.line_chart(st.session_state.sentiment_history)
 
 # Call workflow input as JSON
 default_workflow = {
@@ -126,14 +111,6 @@ with st.sidebar:
     except json.JSONDecodeError:
         st.error("Invalid JSON format for workflow")
         call_workflow = {"nodes": [], "edges": []}
-
-# Display chat messages with sentiment
-for i, message in enumerate(st.session_state.messages):
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
-        if "sentiment" in message:
-            st.write(f"Sentiment: {get_sentiment_color(message['sentiment'])}")
-
 # Chat input
 if prompt := st.chat_input("Type your message here..."):
     # Add user message to chat history
@@ -178,17 +155,13 @@ if prompt := st.chat_input("Type your message here..."):
         ))
 
         # Add assistant response and sentiment to chat history
-        assistant_message = {
-            "role": "assistant",
-            "content": response["response"],
-            "sentiment": response["sentiment"]
-        }
-        st.session_state.messages.append(assistant_message)
-        st.session_state.sentiment_history.append(response["sentiment"])
+        assistant_message = response
+        st.session_state.messages.append({"role": "assistant", "content": assistant_message})
+        # st.session_state.sentiment_history.append(response["sentiment"])
         
         with st.chat_message("assistant"):
-            st.write(response["response"])
-            st.write(f"Sentiment: {get_sentiment_color(response['sentiment'])}")
+            st.write(response)
+            # st.write(f"Sentiment: {get_sentiment_color(response['sentiment'])}")
             
     except Exception as e:
         st.error(f"Error communicating with the server: {str(e)}")

@@ -35,7 +35,7 @@ def get_eventId_from_calendar(calendar_api_key):
             }
     return None
 
-def get_events_from_calendar(context_variables):
+def get_events_from_calendar(context_variables, calendar_api_key:str):
     '''
     Use this function to get all the events from the calendar.
     Args:
@@ -44,10 +44,10 @@ def get_events_from_calendar(context_variables):
             - event_id (int, optional): The identifier of the event type being booked, it is eventtypes id  
             - slotStart (str, optional): The start time of the slot to be booked
     '''
-    print("\n\n Getting events from calendar with api key: ", context_variables["calendar_api_key"])
+    print("\n\n Getting events from calendar with api key: ", calendar_api_key)
 
     # Get all events from calendar
-    event_details = get_eventId_from_calendar(context_variables["calendar_api_key"])
+    event_details = get_eventId_from_calendar(calendar_api_key)
     if event_details and len(event_details["event_types"]) > 0:
         # Store first event ID in context but return full details
         context_variables["event_id"] = event_details["event_types"][0]["id"]
