@@ -7,9 +7,23 @@ from agents_worker.main import HireFinnAgent
 
 st.title("HireFinn Call Chat Interface")
 
-# Initialize session state for messages if not exists
+# Initialize session state for messages and sentiment if not exists
 if 'messages' not in st.session_state:
     st.session_state.messages = []
+if 'sentiment_history' not in st.session_state:
+    st.session_state.sentiment_history = []
+
+def get_sentiment_color(score):
+    if score >= 4:
+        return "🟢 Very Positive"
+    elif score >= 3:
+        return "🟡 Positive"
+    elif score >= 2:
+        return "⚪ Neutral"
+    elif score >= 1:
+        return "🟠 Negative"
+    else:
+        return "🔴 Very Negative"
 
 # Sidebar inputs
 with st.sidebar:
@@ -24,74 +38,84 @@ with st.sidebar:
     response_guidelines = st.text_area("Response Guidelines", "Answer within 3 sentences.")
     welcome_message = st.text_area("Welcome Message", "Welcome to HireFinn!")
     finn_name = st.text_input("Finn Name", "John")
-    # Call workflow input as JSON
-    default_workflow = {
-        "nodes": [
-            {
-                "id": "Task1", 
-                "name": "Greetings",
-                "content": "say 'Hello, this is John, An AI representative calling from Omega HMS Healthcare organization. I'm reaching out to help you access your health service portal, May I speak with Akarsh, please?'",
-                "contentType": "Static"
-            },
-            {
-                "id": "Task2",
-                "name": "Get Calendar Details",
-                "content": "1. Call function get_events_from_calendar to retrieve event details and event ID\n2. Use event ID to get available event types and details",
-                "contentType": "Prompt"
-            },
-            {
-                "id": "Task3", 
-                "name": "Check Availability",
-                "content": "1. Ask user when they would like to schedule.\n2. Call function check_all_availabile_slots to check available time slots",
-                "contentType": "Prompt"
-            },
-            {
-                "id": "Task4",
-                "name": "Reserve Slot", 
-                "content": "Call function reserve_slot_for_startTime to reserve the selected time slot",
-                "contentType": "Prompt"
-            },
-            {
-                "id": "Task5",
-                "name": "Book Appointment",
-                "content": "Call function book_appointment_for_startTime to finalize the booking",
-                "contentType": "Prompt"
-            },
-            {
-                "id": "Task6",
-                "name": "Winding Up",
-                "content": "say 'Thank you for your time. Your appointment has been booked. If you have any questions, feel free to reach out. Have a great day! Goodbye!'",
-                "contentType": "Static"
-            }
-        ],
-        "edges": [
-            {
-                "from": "Task1",
-                "to": "Task2",
-                "condition": "user confirms identity"
-            },
-            {
-                "from": "Task2", 
-                "to": "Task3",
-                "condition": "calendar details and event types retrieved successfully"
-            },
-            {
-                "from": "Task3",
-                "to": "Task4", 
-                "condition": "suitable slot found"
-            },
-            {
-                "from": "Task4",
-                "to": "Task5",
-                "condition": "slot reserved successfully"
-            },
-            {
-                "from": "Task5",
-                "to": "Task6",
-                "condition": "appointment booked successfully"
-            }
-        ]
-    }
+    
+    # Display sentiment history
+    if st.session_state.sentiment_history:
+        st.header("Sentiment History")
+        avg_sentiment = sum(st.session_state.sentiment_history) / len(st.session_state.sentiment_history)
+        st.write(f"Average Sentiment: {get_sentiment_color(avg_sentiment)}")
+        st.line_chart(st.session_state.sentiment_history)
+
+# Call workflow input as JSON
+default_workflow = {
+    "nodes": [
+        {
+            "id": "Task1", 
+            "name": "Greetings",
+            "content": "say 'Hello, this is John, An AI representative calling from Omega HMS Healthcare organization. I'm reaching out to help you access your health service portal, May I speak with Akarsh, please?'",
+            "contentType": "Static"
+        },
+        {
+            "id": "Task2",
+            "name": "Get Calendar Details",
+            "content": "1. Call function get_events_from_calendar to retrieve event details and event ID\n2. Use event ID to get available event types and details",
+            "contentType": "Prompt"
+        },
+        {
+            "id": "Task3", 
+            "name": "Check Availability",
+            "content": "1. Ask user when they would like to schedule.\n2. Call function check_all_availabile_slots to check available time slots",
+            "contentType": "Prompt"
+        },
+        {
+            "id": "Task4",
+            "name": "Reserve Slot", 
+            "content": "Call function reserve_slot_for_startTime to reserve the selected time slot",
+            "contentType": "Prompt"
+        },
+        {
+            "id": "Task5",
+            "name": "Book Appointment",
+            "content": "Call function book_appointment_for_startTime to finalize the booking",
+            "contentType": "Prompt"
+        },
+        {
+            "id": "Task6",
+            "name": "Winding Up",
+            "content": "say 'Thank you for your time. Your appointment has been booked. If you have any questions, feel free to reach out. Have a great day! Goodbye!'",
+            "contentType": "Static"
+        }
+    ],
+    "edges": [
+        {
+            "from": "Task1",
+            "to": "Task2",
+            "condition": "user confirms identity"
+        },
+        {
+            "from": "Task2", 
+            "to": "Task3",
+            "condition": "calendar details and event types retrieved successfully"
+        },
+        {
+            "from": "Task3",
+            "to": "Task4", 
+            "condition": "suitable slot found"
+        },
+        {
+            "from": "Task4",
+            "to": "Task5",
+            "condition": "slot reserved successfully"
+        },
+        {
+            "from": "Task5",
+            "to": "Task6",
+            "condition": "appointment booked successfully"
+        }
+    ]
+}
+
+with st.sidebar:
     workflow_json = st.text_area(
         "Call Workflow (JSON)",
         value=json.dumps(default_workflow, indent=2),
@@ -103,10 +127,12 @@ with st.sidebar:
         st.error("Invalid JSON format for workflow")
         call_workflow = {"nodes": [], "edges": []}
 
-# Display chat messages
-for message in st.session_state.messages:
+# Display chat messages with sentiment
+for i, message in enumerate(st.session_state.messages):
     with st.chat_message(message["role"]):
         st.write(message["content"])
+        if "sentiment" in message:
+            st.write(f"Sentiment: {get_sentiment_color(message['sentiment'])}")
 
 # Chat input
 if prompt := st.chat_input("Type your message here..."):
@@ -135,7 +161,7 @@ if prompt := st.chat_input("Type your message here..."):
     try:
         worker = HireFinnAgent()
         # Run async code in sync context
-        assistant_response = asyncio.run(worker.get_assistant_response(
+        response = asyncio.run(worker.get_assistant_response(
             request_data["messages"],
             request_data["calendar_api_key"],
             request_data["org_id"], 
@@ -151,9 +177,18 @@ if prompt := st.chat_input("Type your message here..."):
             request_data["finn_name"]
         ))
 
-        # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+        # Add assistant response and sentiment to chat history
+        assistant_message = {
+            "role": "assistant",
+            "content": response["response"],
+            "sentiment": response["sentiment"]
+        }
+        st.session_state.messages.append(assistant_message)
+        st.session_state.sentiment_history.append(response["sentiment"])
+        
         with st.chat_message("assistant"):
-            st.write(assistant_response)
+            st.write(response["response"])
+            st.write(f"Sentiment: {get_sentiment_color(response['sentiment'])}")
+            
     except Exception as e:
         st.error(f"Error communicating with the server: {str(e)}")

@@ -28,20 +28,34 @@ def generate_call_agent_prompt(
     rag_context = f"\n### 📚 Contextual Knowledge for your reference (RAG Content):\n{rag_content}\n" if rag_content else ""
 
     prompt = f"""
-    You have to use the calendar agent to get the event details, check the availability of the slot, reserve the slot and book the appointment.
+    You are an AI assistant that must analyze user sentiment and provide responses in a specific format.
 
-    You have to use the event_details_agent to get the event details.
-    You have to use the check_availability_agent to check the availability of the slot.
-    You have to use the reserve_slot_agent to reserve the slot.
-    You have to use the book_appointment_agent to book the appointment.
+    For every interaction:
+    1. Analyze the sentiment of the user's message on a scale of 1-5:
+       - 1: Very Negative (frustration, anger, strong dissatisfaction)
+       - 2: Negative (mild dissatisfaction, confusion, hesitation)
+       - 3: Neutral (basic acknowledgments, factual statements)
+       - 4: Positive (satisfaction, agreement, appreciation)
+       - 5: Very Positive (enthusiasm, gratitude, strong satisfaction)
 
-    Always use the calendar_agent to get the event details, check the availability of the slot, reserve the slot and book the appointment.
+    2. Use the calendar agent to manage appointments:
+       - Get event details
+       - Check slot availability
+       - Reserve slots
+       - Book appointments
 
-    Do not give success or failure message without using the calendar_agent.
-    Success or failure message is only given by the calendar_agent.
+    3. ALWAYS format your response as a JSON object:
+    {{
+        "response": "Your actual response message here",
+        "sentiment": sentiment_score_here (number between 1-5)
+    }}
 
-    You have to transfer the control to the calendar_agent to get the event details, check the availability of the slot, reserve the slot and book the appointment.
-    When you transfer the control you have to use the transfer_control function, such as transfer_control(to_calendar_agent)
+    Remember:
+    - Always use the calendar_agent for appointment-related tasks
+    - Never give success/failure messages without using calendar_agent
+    - Transfer control using transfer_control(to_calendar_agent)
+    - Analyze sentiment based on word choice, tone, emotional content, and context
+    - Always return response in the specified JSON format
     """
 
     return prompt
